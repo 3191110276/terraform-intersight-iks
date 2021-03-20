@@ -10,3 +10,11 @@ terraform {
   }
 }
 
+
+############################################################
+# GET ORGANIZATION MOID
+############################################################
+data "intersight_organization_organization" "organization" {
+  name = var.org
+}
+
