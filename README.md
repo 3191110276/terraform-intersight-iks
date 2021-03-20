@@ -1,1 +1,1 @@
-# terraform-intersight-iks
+# Module for deploying Kubernetes clusters using Intersight
