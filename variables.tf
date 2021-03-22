@@ -42,3 +42,20 @@ variable "service_cidr" {
   description = "The CIDR used for the Kubernetes Service network."
 }
 
+variable "cpu" {
+  type        = string
+  default     = "4"
+  description = "The amount of CPU cores that will be assigned to each created Kubernetes Node/VM."
+}
+
+variable "memory" {
+  type        = string
+  default     = "4096"
+  description = "The amount of memory that will be assigned to each created Kubernetes Node/VM."
+}
+
+variable "disk_size" {
+  type        = string
+  default     = "25"
+  description = "The disk size of each created Kubernetes Node/VMs."
+}
