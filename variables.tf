@@ -89,3 +89,15 @@ variable "vcenter_target" {
   type        = string
   description = "The name of the Intersight IP pool that is used for reserving IP addresses for all cluster Nodes/VMs."
 }
+
+variable "master_count" {
+  type    = number
+  default = 3
+  description = "The amount of Kubernetes Master Nodes/VMs to be provisioned. Can be 1 (No HA) or 3 (HA enabled)."
+}
+
+variable "worker_count" {
+  type    = number
+  default = 4
+  description = "The amount of Kubernetes Worker Nodes/VMs to be provisioned. This has to be a value larger than 0."
+}
