@@ -91,27 +91,67 @@ resource "intersight_kubernetes_network_policy" "k8s_network" {
 ############################################################
 # CREATE K8S NODE TYPE POLICY
 ############################################################
+resource "intersight_kubernetes_virtual_machine_instance_type" "k8s_nodetype" {
 
+  name = "${var.cluster_name}_nodetype"
+
+  cpu = var.cpu
+  memory = var.memory
+  disk_size = var.disk_size
+
+  organization {
+    object_type = "organization.Organization"
+    moid        = data.intersight_organization_organization.organization.moid
+  }
+}
 
 
 ############################################################
 # GET VCENTER MOID
 ############################################################
-
-
-
-
-############################################################
-# GET IP POOL MOID
-############################################################
-
-
+data "intersight_asset_target" "infra_target" {
+  name = var.vcenter_target
+}
 
 
 ############################################################
 # CREATE K8S INFRA PROVIDER
 ############################################################
+resource "intersight_kubernetes_virtual_machine_infrastructure_provider" "k8s_infraprovider" {
 
+  name = "${var.cluster_name}_infraprovider"
+
+  infra_config {
+    object_type = "kubernetes.EsxiVirtualMachineInfraConfig"
+    interfaces  = var.vcenter_network
+    additional_properties = jsonencode({
+      Datastore    = var.vcenter_datastore
+      Cluster      = var.vcenter_cluster
+      Passphrase   = var.vcenter_passphrase
+    })
+  }
+
+  instance_type {
+      object_type = "kubernetes.VirtualMachineInstanceType"
+      moid = intersight_kubernetes_virtual_machine_instance_type.k8s_nodetype.moid
+  }
+
+  target {
+    object_type = "asset.DeviceRegistration"
+    moid = data.intersight_asset_target.infra_target.registered_device[0].moid
+
+  }
+
+  organization {
+    object_type = "organization.Organization"
+    moid        = data.intersight_organization_organization.organization.moid
+  }
+}
+
+
+############################################################
+# GET IP POOL MOID
+############################################################
 
 
 
