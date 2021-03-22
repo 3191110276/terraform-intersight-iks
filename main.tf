@@ -226,8 +226,43 @@ resource "intersight_kubernetes_node_group_profile" "k8s_workergroup" {
 ############################################################
 # CREATE K8S PROFILE
 ############################################################
+resource "intersight_kubernetes_cluster_profile" "k8s_cluster" {
 
+  name = "${var.cluster_name}_cluster"
 
+  action = "Deploy"
+
+  cluster_ip_pools {
+    moid = intersight_ippool_pool.k8s_pool.moid
+    object_type = "ippool.Pool"
+  }
+
+  management_config {
+    load_balancer_count = var.loadbalancer_count
+    ssh_user = var.ssh_user
+    ssh_keys = var.ssh_keys
+  }
+
+  sys_config {
+    moid = intersight_kubernetes_sys_config_policy.k8s_sysconfig.moid
+    object_type = "kubernetes.SysConfigPolicy"
+  }
+
+  net_config {
+    moid = intersight_kubernetes_network_policy.k8s_network.moid
+    object_type = "kubernetes.NetworkPolicy"
+  }
+
+  container_runtime_config {
+    moid = intersight_kubernetes_container_runtime_policy.k8s_runtime.moid
+    object_type = "kubernetes.ContainerRuntimePolicy"
+  }
+
+  organization {
+    object_type = "organization.Organization"
+    moid        = data.intersight_organization_organization.organization.moid
+  }
+}
 
 
 ############################################################
