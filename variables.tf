@@ -101,3 +101,20 @@ variable "worker_count" {
   default = 4
   description = "The amount of Kubernetes Worker Nodes/VMs to be provisioned. This has to be a value larger than 0."
 }
+
+variable "loadbalancer_count" {
+  type    = number
+  default = 1
+  description = "The number of LoadBalancers that will be provisioned for the cluster. Each LoadBalancer consumes one IP address."
+}
+
+variable "ssh_user" {
+  type    = string
+  description = "The SSH user that will be created on the cluster. This user is used when instantiating SSH connections to the Nodes/VMs of the cluster."
+}
+
+variable "ssh_keys" {
+  type    = list
+  description = "The SSH key(s) that will be created on the cluster. This user is used when instantiating SSH connections to the Nodes/VMs of the cluster."
+
+}
