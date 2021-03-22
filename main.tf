@@ -268,26 +268,48 @@ resource "intersight_kubernetes_cluster_profile" "k8s_cluster" {
 ############################################################
 # WAIT FOR KUBECONFIG TO BE CREATED
 ############################################################
+resource "time_sleep" "sleep_after_cluster_creation" {
+  depends_on = [intersight_kubernetes_cluster_profile.k8s_cluster]
 
-
+  create_duration = "30s"
+}
 
 
 ############################################################
 # GET CLUSTER INFORMATION
 ############################################################
-
-
+data "intersight_kubernetes_cluster_profile" "output" {
+  depends_on = [time_sleep.sleep_after_cluster_creation]
+  name = "${var.cluster_name}_cluster"
+}
 
 
 ############################################################
 # EXTRACT KUBECONFIG
 ############################################################
+resource "local_file" "buffer" {
+  depends_on = [data.intersight_kubernetes_cluster_profile.output]
+    content  = jsonencode(data.intersight_kubernetes_cluster_profile.output)
+    filename = "${path.module}/buffer.json"
+}
 
+resource "null_resource" "extract_step" {
+  depends_on = [local_file.buffer]
+  provisioner "local-exec" {
 
+    command = "cat ${path.module}/buffer.json | jq '.kube_config[0].kube_config' > ${path.module}/kubeconfig.json"
+  }
+}
+
+data "local_file" "kubeconfig" {
+  depends_on = [null_resource.extract_step]
+  filename = "${path.module}/kubeconfig.json"
+}
 
 
 ############################################################
 # DEFINE OUTPUT
 ############################################################
-
-
+output "kubeconfig" {
+  value = data.local_file.kubeconfig.content
+}
