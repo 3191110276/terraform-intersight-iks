@@ -59,3 +59,28 @@ variable "disk_size" {
   default     = "25"
   description = "The disk size of each created Kubernetes Node/VMs."
 }
+
+variable "vcenter_target" {
+  type        = string
+  description = "The target name of the vCenter target in Intersight. Keep in mind that this does not have to be the DNS name of vCenter, but rather the name in the Intersight Targets."
+}
+
+variable "vcenter_cluster" {
+  type    = string
+  description = "The name of the vCenter cluster in which the Kubernetes Nodes will be provisioned."
+}
+
+variable "vcenter_datastore" {
+  type    = string
+  description = "The name of the vCenter datastore which will be used for storing the data of the Kubernetes Nodes/VMs."
+}
+
+variable "vcenter_network" {
+  type    = list
+  description = "The name of the vCenter networks which the Kubernetes Nodes/VMs will be attached to."
+}
+
+variable "vcenter_passphrase" {
+  type    = string
+  description = "The admin password of the ESXi hosts in the cluster."
+}
