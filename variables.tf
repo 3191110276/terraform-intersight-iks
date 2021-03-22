@@ -42,6 +42,48 @@ variable "service_cidr" {
   description = "The CIDR used for the Kubernetes Service network."
 }
 
+variable "proxy_enabled" {
+  type    = bool
+  default = false
+  description = "Determines if the cluster will be configured with a proxy for outside connectivity, for example for pulling container images from the Internet."
+}
+
+variable "http_proxy_hostname" {
+  type    = string
+  default = ""
+  description = "The Proxy hostname used for outside HTTP connections."
+}
+
+variable "http_proxy_protocol" {
+  type    = string
+  default = "http"
+  description = "The Proxy protocol used for outside HTTP connections."
+}
+
+variable "http_proxy_port" {
+  type    = string
+  default = 80
+  description = "The Proxy port used for outside HTTP connections."
+}
+
+variable "https_proxy_hostname" {
+  type    = string
+  default = ""
+  description = "The Proxy hostname used for outside HTTPS connections."
+}
+
+variable "https_proxy_protocol" {
+  type    = string
+  default = "https"
+  description = "The Proxy protocol used for outside HTTPS connections."
+}
+
+variable "https_proxy_port" {
+  type    = string
+  default = 443
+  description = "The Proxy port used for outside HTTPS connections."
+}
+
 variable "cpu" {
   type        = string
   default     = "4"
@@ -116,5 +158,4 @@ variable "ssh_user" {
 variable "ssh_keys" {
   type    = list
   description = "The SSH key(s) that will be created on the cluster. This user is used when instantiating SSH connections to the Nodes/VMs of the cluster."
-
 }
