@@ -85,7 +85,29 @@ resource "intersight_kubernetes_network_policy" "k8s_network" {
 ############################################################
 # CREATE K8S CONTAINER RUNTIME POLICY
 ############################################################
+resource "intersight_kubernetes_container_runtime_policy" "k8s_runtime" {
 
+  name = "${var.cluster_name}_runtime"
+  
+  count = var.proxy_enabled ? 1 : 0
+
+  docker_http_proxy {
+    protocol = var.http_proxy_protocol
+    hostname = var.http_proxy_hostname
+    port     = var.http_proxy_port
+  }
+
+  docker_https_proxy {
+    protocol = var.https_proxy_protocol
+    hostname = var.https_proxy_hostname
+    port     = var.https_proxy_port
+  }
+
+  organization {
+    object_type = "organization.Organization"
+    moid        = data.intersight_organization_organization.organization.moid
+  }
+}
 
 
 ############################################################
