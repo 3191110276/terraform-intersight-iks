@@ -152,21 +152,75 @@ resource "intersight_kubernetes_virtual_machine_infrastructure_provider" "k8s_in
 ############################################################
 # GET IP POOL MOID
 ############################################################
-
+data "intersight_ippool_pool" "k8s_pool" {
+  name = var.ip_pool
+}
 
 
 ############################################################
 # CREATE MASTER NODE GROUP FOR CLUSTER
 ############################################################
+resource "intersight_kubernetes_node_group_profile" "k8s_mastergroup" {
 
+  name = "${var.cluster_name}_mastergroup"
 
+  node_type = "Master"
+
+  desiredsize = var.master_count
+
+  kubernetes_version {
+    moid = intersight_kubernetes_version_policy.k8s_version.moid
+    object_type = "kubernetes.VersionPolicy"
+  }
+
+  infra_provider {
+    moid = intersight_kubernetes_virtual_machine_infrastructure_provider.k8s_infraprovider.moid
+    object_type = "kubernetes.VirtualMachineInfrastructureProvider"
+  }
+
+  ip_pools {
+    moid = intersight_ippool_pool.k8s_pool.moid
+    object_type = "ippool.Pool"
+  }
+
+  cluster_profile {
+    object_type = "kubernetes.ClusterProfile"
+    moid = intersight_kubernetes_cluster_profile.k8s_cluster.id
+  }
+}
 
 
 ############################################################
 # CREATE WORKER NODE GROUP FOR CLUSTER
 ############################################################
+resource "intersight_kubernetes_node_group_profile" "k8s_workergroup" {
 
+  name = "${var.cluster_name}_workergroup"
 
+  node_type = "Worker"
+
+  desiredsize = var.worker_count
+
+  kubernetes_version {
+    moid = intersight_kubernetes_version_policy.k8s_version.moid
+    object_type = "kubernetes.VersionPolicy"
+  }
+
+  infra_provider {
+    moid = intersight_kubernetes_virtual_machine_infrastructure_provider.k8s_infraprovider.moid
+    object_type = "kubernetes.VirtualMachineInfrastructureProvider"
+  }
+
+  ip_pools {
+    moid = intersight_ippool_pool.k8s_pool.moid
+    object_type = "ippool.Pool"
+  }
+
+  cluster_profile {
+    object_type = "kubernetes.ClusterProfile"
+    moid = intersight_kubernetes_cluster_profile.k8s_cluster.moid
+  }
+}
 
 
 ############################################################
