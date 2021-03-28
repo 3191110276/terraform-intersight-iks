@@ -127,7 +127,7 @@ variable "vcenter_passphrase" {
   description = "The admin password of the ESXi hosts in the cluster."
 }
 
-variable "vcenter_target" {
+variable "ip_pool" {
   type        = string
   description = "The name of the Intersight IP pool that is used for reserving IP addresses for all cluster Nodes/VMs."
 }
