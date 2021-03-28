@@ -255,7 +255,7 @@ resource "intersight_kubernetes_cluster_profile" "k8s_cluster" {
   action = "Deploy"
 
   cluster_ip_pools {
-    moid = intersight_ippool_pool.k8s_pool.moid
+    moid = data.intersight_ippool_pool.k8s_pool.moid
     object_type = "ippool.Pool"
   }
 
