@@ -250,7 +250,7 @@ resource "intersight_kubernetes_node_group_profile" "k8s_workergroup" {
 ############################################################
 resource "intersight_kubernetes_cluster_profile" "k8s_cluster" {
 
-  name = "${var.cluster_name}_cluster"
+  name = "${var.cluster_name}"
 
   action = "Deploy"
 
@@ -305,7 +305,7 @@ resource "time_sleep" "sleep_after_cluster_creation" {
 ############################################################
 data "intersight_kubernetes_cluster_profile" "output" {
   depends_on = [time_sleep.sleep_after_cluster_creation]
-  name = "${var.cluster_name}_cluster"
+  name = "${var.cluster_name}"
 }
 
 
