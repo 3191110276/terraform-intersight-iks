@@ -201,7 +201,7 @@ resource "intersight_kubernetes_node_group_profile" "k8s_mastergroup" {
   }
 
   ip_pools {
-    moid = intersight_ippool_pool.k8s_pool.moid
+    moid = data.intersight_ippool_pool.k8s_pool.moid
     object_type = "ippool.Pool"
   }
 
@@ -234,7 +234,7 @@ resource "intersight_kubernetes_node_group_profile" "k8s_workergroup" {
   }
 
   ip_pools {
-    moid = intersight_ippool_pool.k8s_pool.moid
+    moid = data.intersight_ippool_pool.k8s_pool.moid
     object_type = "ippool.Pool"
   }
 
