@@ -274,11 +274,6 @@ resource "intersight_kubernetes_cluster_profile" "k8s_cluster" {
     moid = intersight_kubernetes_network_policy.k8s_network.moid
     object_type = "kubernetes.NetworkPolicy"
   }
-
-  container_runtime_config {
-    moid = intersight_kubernetes_container_runtime_policy.k8s_runtime[0].moid
-    object_type = "kubernetes.ContainerRuntimePolicy"
-  }
   
   dynamic "container_runtime_config" {
     for_each = intersight_kubernetes_container_runtime_policy.k8s_runtime
