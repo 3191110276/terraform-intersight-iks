@@ -268,6 +268,51 @@ resource "intersight_kubernetes_virtual_machine_infrastructure_provider" "master
 
 
 ############################################################
+# CREATE WORKER NODE GROUP FOR CLUSTER
+############################################################
+resource "intersight_kubernetes_node_group_profile" "workergroup" {
+  name      = "${var.cluster_name}_workergroup"
+  node_type = "Worker"
+  
+  desiredsize = var.worker_count
+
+  cluster_profile {
+    moid = intersight_kubernetes_cluster_profile.profile.moid
+    object_type = "kubernetes.ClusterProfile" 
+  }
+
+  kubernetes_version {
+    moid = intersight_kubernetes_version_policy.version.moid
+    object_type = "kubernetes.VersionPolicy"
+  }
+  
+  ip_pools {
+    moid = data.intersight_ippool_pool.k8s_pool.results[0].moid
+    object_type = "ippool.Pool"
+  }
+}
+
+resource "intersight_kubernetes_virtual_machine_infrastructure_provider" "workergroup" {
+  name = "${var.cluster_name}_workergroup_infra"
+  
+  infra_config_policy {
+    moid = intersight_kubernetes_virtual_machine_infra_config_policy.infra_policy.moid
+    object_type = "kubernetes.VirtualMachineInfraConfigPolicy"
+  }
+  
+  instance_type {
+    moid = intersight_kubernetes_virtual_machine_instance_type.nodetype.moid
+    object_type = "kubernetes.VirtualMachineInstanceType"
+  }
+  
+  node_group {
+    moid = intersight_kubernetes_node_group_profile.workergroup.moid 
+    object_type = "kubernetes.NodeGroupProfile"
+  }
+}
+
+
+############################################################
 # DEPLOY PROFILE
 ############################################################
 #resource "intersight_kubernetes_cluster_profile" "profile_deploy" {
