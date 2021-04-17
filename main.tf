@@ -179,7 +179,9 @@ resource "intersight_kubernetes_cluster_profile" "profile" {
 
   name = var.cluster_name
 
-  wait_for_completion = false
+  action = "Deploy"
+	
+  #wait_for_completion = false
 
   cluster_ip_pools {
     moid = data.intersight_ippool_pool.k8s_pool.results[0].moid
@@ -268,18 +270,18 @@ resource "intersight_kubernetes_virtual_machine_infrastructure_provider" "master
 ############################################################
 # DEPLOY PROFILE
 ############################################################
-resource "intersight_kubernetes_cluster_profile" "profile_deploy" {
-  depends_on = [intersight_kubernetes_node_group_profile.mastergroup]
-  
-  action = "Deploy"
-  
-  name = var.cluster_name
-  
-  organization {
-    object_type = "organization.Organization"
-    moid        = data.intersight_organization_organization.organization.results[0].moid
-  }
-}
+#resource "intersight_kubernetes_cluster_profile" "profile_deploy" {
+#  depends_on = [intersight_kubernetes_node_group_profile.mastergroup]
+#  
+#  action = "Deploy"
+#  
+#  name = var.cluster_name
+#  
+#  organization {
+#    object_type = "organization.Organization"
+#    moid        = data.intersight_organization_organization.organization.results[0].moid
+#  }
+#}
 
 
 ############################################################
