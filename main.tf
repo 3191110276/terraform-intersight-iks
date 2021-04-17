@@ -36,7 +36,7 @@ resource "intersight_kubernetes_version_policy" "version" {
 
   nr_version {
     object_type = "kubernetes.Version"
-    moid        = data.intersight_kubernetes_version.version.moid
+    moid        = data.intersight_kubernetes_version.version.results[0].moid
   }
 
   organization {
