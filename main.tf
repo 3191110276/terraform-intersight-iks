@@ -220,7 +220,6 @@ resource "intersight_kubernetes_cluster_profile" "profile" {
 }
 
 
-
 ############################################################
 # CREATE MASTER NODE GROUP FOR CLUSTER
 ############################################################
@@ -265,3 +264,19 @@ resource "intersight_kubernetes_virtual_machine_infrastructure_provider" "master
   }
 }
 
+
+############################################################
+# DEPLOY PROFILE
+############################################################
+resource "intersight_kubernetes_cluster_profile" "profile_deploy" {
+  depends_on = [intersight_kubernetes_node_group_profile.mastergroup]
+  
+  action = "Deploy"
+  
+  name = var.cluster_name
+  
+  organization {
+    object_type = "organization.Organization"
+    moid        = data.intersight_organization_organization.organization.results[0].moid
+  }
+}
