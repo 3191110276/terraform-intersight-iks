@@ -151,11 +151,12 @@ variable "loadbalancer_count" {
 }
 
 variable "ssh_user" {
-  type    = string
+  type        = string
+  default     = "iksadmin"
   description = "The SSH user that will be created on the cluster. This user is used when instantiating SSH connections to the Nodes/VMs of the cluster."
 }
 
 variable "ssh_keys" {
-  type    = list
+  type        = list
   description = "The SSH key(s) that will be created on the cluster. This user is used when instantiating SSH connections to the Nodes/VMs of the cluster."
 }
