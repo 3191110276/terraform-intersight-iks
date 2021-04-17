@@ -113,7 +113,7 @@ resource "intersight_kubernetes_container_runtime_policy" "k8s_runtime" {
 ############################################################
 # CREATE K8S NODE TYPE POLICY
 ############################################################
-resource "intersight_kubernetes_virtual_machine_instance_type" "k8s_nodetype" {
+resource "intersight_kubernetes_virtual_machine_instance_type" "nodetype" {
 
   name = "${var.cluster_name}_nodetype"
 
@@ -172,3 +172,51 @@ data "intersight_ippool_pool" "k8s_pool" {
 }
 
 
+############################################################
+# CREATE MASTER NODE GROUP FOR CLUSTER
+############################################################
+resource "intersight_kubernetes_node_group_profile" "mastergroup" {
+  name      = "${var.cluster_name}_mastergroup"
+  node_type = "ControlPlane"
+  
+  desiredsize = var.master_count
+
+  cluster_profile {
+    moid = intersight_kubernetes_cluster_profile.profile.moid
+    object_type = "kubernetes.ClusterProfile" 
+  }
+
+  kubernetes_version {
+    moid = intersight_kubernetes_version_policy.k8s_version.results[0].moid
+    object_type = "kubernetes.VersionPolicy"
+  }
+  
+  ip_pools {
+    moid = data.intersight_ippool_pool.k8s_pool.results[0].moid
+    object_type = "ippool.Pool"
+  }
+}
+
+resource "intersight_kubernetes_virtual_machine_infrastructure_provider" "mastergroup" {
+	name = "${var.cluster_name}_mastergroup_infra"
+  
+	infra_config_policy {
+		moid = intersight_kubernetes_virtual_machine_infra_config_policy.infra_policy.moid
+		object_type = "kubernetes.VirtualMachineInfraConfigPolicy"
+	}
+  
+	instance_type {
+		moid = intersight_kubernetes_virtual_machine_instance_type.nodetype.moid
+		object_type = "kubernetes.VirtualMachineInstanceType"
+	}
+  
+	node_group {
+		moid = intersight_kubernetes_node_group_profile.mastergroup.moid 
+		object_type = "kubernetes.NodeGroupProfile"
+	}
+}
+
+
+############################################################
+# CREATE K8S PROFILE
+############################################################
