@@ -11,7 +11,7 @@ variable "cluster_name" {
 
 variable "k8s_version" {
   type        = string
-  default     = "1.18.12"
+  default     = "1.19.5"
   description = "The Kubernetes version that the created cluster will be based on."
 }
 
