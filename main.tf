@@ -134,3 +134,38 @@ resource "intersight_kubernetes_virtual_machine_instance_type" "k8s_nodetype" {
 data "intersight_asset_target" "infra_target" {
   name = var.vcenter_target
 }
+
+
+############################################################
+# CREATE K8S INFRA PROVIDER
+############################################################
+resource "intersight_kubernetes_virtual_machine_infrastructure_provider" "k8s_infraprovider" {
+
+  name = "${var.cluster_name}_infraprovider"
+
+  infra_config {
+    object_type = "kubernetes.EsxiVirtualMachineInfraConfig"
+    interfaces  = var.vcenter_network
+    additional_properties = jsonencode({
+      Datastore    = var.vcenter_datastore
+      Cluster      = var.vcenter_cluster
+      Passphrase   = var.vcenter_passphrase
+    })
+  }
+
+  instance_type {
+      object_type = "kubernetes.VirtualMachineInstanceType"
+      moid = intersight_kubernetes_virtual_machine_instance_type.k8s_nodetype.moid
+  }
+
+  target {
+    object_type = "asset.DeviceRegistration"
+    moid = data.intersight_asset_target.infra_target.results[0].moid
+
+  }
+  
+  organization {
+    object_type = "organization.Organization"
+    moid        = data.intersight_organization_organization.organization.results[0].moid
+  }
+}
