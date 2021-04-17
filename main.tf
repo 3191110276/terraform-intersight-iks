@@ -41,6 +41,6 @@ resource "intersight_kubernetes_version_policy" "k8s_version" {
 
   organization {
     object_type = "organization.Organization"
-    moid        = data.intersight_organization_organization.moid
+    moid        = data.intersight_organization_organization.organization.moid
   }
 }
