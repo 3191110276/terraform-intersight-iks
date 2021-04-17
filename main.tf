@@ -163,11 +163,6 @@ resource "intersight_kubernetes_virtual_machine_infrastructure_provider" "k8s_in
     moid = data.intersight_asset_target.infra_target.moid
 
   }
-
-  organization {
-    object_type = "organization.Organization"
-    moid        = data.intersight_organization_organization.organization.moid
-  }
 }
 
 
