@@ -175,13 +175,49 @@ data "intersight_ippool_pool" "k8s_pool" {
 ############################################################
 # CREATE K8S PROFILE
 ############################################################
+resource "intersight_kubernetes_cluster_profile" "profile" {
 
+  name = var.cluster_name
 
+  wait_for_completion = false
 
+  cluster_ip_pools {
+    moid = data.intersight_ippool_pool.k8s_pool.results[0].moid
+    object_type = "ippool.Pool"
+  }
 
+  management_config {
+    load_balancer_count = var.loadbalancer_count
+    
+    ssh_user = var.ssh_user
+    ssh_keys = var.ssh_keys
+    
+    encrypted_etcd = true
+  }
 
+  sys_config {
+    moid = intersight_kubernetes_sys_config_policy.k8s_sysconfig.moid
+    object_type = "kubernetes.SysConfigPolicy"
+  }
 
+  net_config {
+    moid = intersight_kubernetes_network_policy.k8s_network.moid
+    object_type = "kubernetes.NetworkPolicy"
+  }
+  
+  dynamic "container_runtime_config" {
+    for_each = intersight_kubernetes_container_runtime_policy.k8s_runtime
+    content {
+      moid = intersight_kubernetes_container_runtime_policy.k8s_runtime[0].moid
+      object_type = "kubernetes.ContainerRuntimePolicy"
+    }
+  }
 
+  organization {
+    object_type = "organization.Organization"
+    moid        = data.intersight_organization_organization.organization.results[0].moid
+  }
+}
 
 
 
