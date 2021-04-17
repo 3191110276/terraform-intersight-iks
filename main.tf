@@ -300,7 +300,7 @@ resource "time_sleep" "sleep_after_cluster_creation" {
 ############################################################
 data "intersight_kubernetes_cluster_profile" "output" {
   depends_on = [time_sleep.sleep_after_cluster_creation]
-  name = "${var.cluster_name}"
+  name = var.cluster_name
 }
 
 
