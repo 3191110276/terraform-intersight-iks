@@ -160,7 +160,7 @@ resource "intersight_kubernetes_virtual_machine_infrastructure_provider" "k8s_in
 
   target {
     object_type = "asset.DeviceRegistration"
-    moid = data.intersight_asset_target.infra_target.registered_device[0].moid
+    moid = data.intersight_asset_target.registered_device[0].moid
 
   }
 
