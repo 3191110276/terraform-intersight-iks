@@ -173,6 +173,19 @@ data "intersight_ippool_pool" "k8s_pool" {
 
 
 ############################################################
+# CREATE K8S PROFILE
+############################################################
+
+
+
+
+
+
+
+
+
+
+############################################################
 # CREATE MASTER NODE GROUP FOR CLUSTER
 ############################################################
 resource "intersight_kubernetes_node_group_profile" "mastergroup" {
@@ -198,25 +211,21 @@ resource "intersight_kubernetes_node_group_profile" "mastergroup" {
 }
 
 resource "intersight_kubernetes_virtual_machine_infrastructure_provider" "mastergroup" {
-	name = "${var.cluster_name}_mastergroup_infra"
+  name = "${var.cluster_name}_mastergroup_infra"
   
-	infra_config_policy {
-		moid = intersight_kubernetes_virtual_machine_infra_config_policy.infra_policy.moid
-		object_type = "kubernetes.VirtualMachineInfraConfigPolicy"
-	}
+  infra_config_policy {
+    moid = intersight_kubernetes_virtual_machine_infra_config_policy.infra_policy.moid
+    object_type = "kubernetes.VirtualMachineInfraConfigPolicy"
+  }
   
-	instance_type {
-		moid = intersight_kubernetes_virtual_machine_instance_type.nodetype.moid
-		object_type = "kubernetes.VirtualMachineInstanceType"
-	}
+  instance_type {
+    moid = intersight_kubernetes_virtual_machine_instance_type.nodetype.moid
+    object_type = "kubernetes.VirtualMachineInstanceType"
+  }
   
-	node_group {
-		moid = intersight_kubernetes_node_group_profile.mastergroup.moid 
-		object_type = "kubernetes.NodeGroupProfile"
-	}
+  node_group {
+    moid = intersight_kubernetes_node_group_profile.mastergroup.moid 
+    object_type = "kubernetes.NodeGroupProfile"
+  }
 }
 
-
-############################################################
-# CREATE K8S PROFILE
-############################################################
