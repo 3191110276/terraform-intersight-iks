@@ -30,7 +30,7 @@ data "intersight_kubernetes_version" "version" {
 ############################################################
 # CREATE K8S VERSION POLICY
 ############################################################
-resource "intersight_kubernetes_version_policy" "k8s_version" {
+resource "intersight_kubernetes_version_policy" "version" {
   
   name = "${var.cluster_name}_version"
 
@@ -236,7 +236,7 @@ resource "intersight_kubernetes_node_group_profile" "mastergroup" {
   }
 
   kubernetes_version {
-    moid = intersight_kubernetes_version_policy.k8s_version.results[0].moid
+    moid = intersight_kubernetes_version_policy.version.moid
     object_type = "kubernetes.VersionPolicy"
   }
   
