@@ -280,3 +280,11 @@ resource "intersight_kubernetes_cluster_profile" "profile_deploy" {
     moid        = data.intersight_organization_organization.organization.results[0].moid
   }
 }
+
+
+############################################################
+# KUBECONFIG OUTPUT
+############################################################
+output "kube_config" {
+	value = intersight_kubernetes_cluster_profile.profile_deploy.kube_config[0].kube_config
+}
