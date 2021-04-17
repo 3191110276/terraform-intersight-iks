@@ -288,5 +288,5 @@ resource "intersight_kubernetes_virtual_machine_infrastructure_provider" "master
 # KUBECONFIG OUTPUT
 ############################################################
 output "kube_config" {
-	value = intersight_kubernetes_cluster_profile.profile_deploy.kube_config[0].kube_config
+  value = intersight_kubernetes_cluster_profile.profile_deploy.kube_config[0].kube_config
 }
