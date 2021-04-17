@@ -160,7 +160,7 @@ resource "intersight_kubernetes_virtual_machine_infrastructure_provider" "k8s_in
 
   target {
     object_type = "asset.DeviceRegistration"
-    moid = data.intersight_asset_target.infra_target.registered_device.moid
+    moid = data.intersight_asset_target.infra_target.moid
 
   }
 
@@ -250,7 +250,7 @@ resource "intersight_kubernetes_node_group_profile" "k8s_workergroup" {
 ############################################################
 resource "intersight_kubernetes_cluster_profile" "k8s_cluster" {
 
-  name = "${var.cluster_name}"
+  name = var.cluster_name
 
   action = "Deploy"
 
