@@ -137,13 +137,12 @@ data "intersight_asset_target" "infra_target" {
 
 
 ############################################################
-# CREATE K8S INFRA PROVIDER
+# CREATE K8S INFRA PROVIDER POLICY
 ############################################################
-resource "intersight_kubernetes_virtual_machine_infrastructure_provider" "k8s_infraprovider" {
-
-  name = "${var.cluster_name}_infraprovider"
-
-  infra_config {
+resource "intersight_kubernetes_virtual_machine_infra_config_policy" "infra_policy" {
+  name = "${var.cluster_name}_infrapolicy"
+  
+  vm_config {
     object_type = "kubernetes.EsxiVirtualMachineInfraConfig"
     interfaces  = var.vcenter_network
     additional_properties = jsonencode({
@@ -152,15 +151,24 @@ resource "intersight_kubernetes_virtual_machine_infrastructure_provider" "k8s_in
       Passphrase   = var.vcenter_passphrase
     })
   }
-
-  instance_type {
-      object_type = "kubernetes.VirtualMachineInstanceType"
-      moid = intersight_kubernetes_virtual_machine_instance_type.k8s_nodetype.moid
-  }
-
+  
   target {
     object_type = "asset.DeviceRegistration"
-    moid = data.intersight_asset_target.infra_target.results[0].moid
-
+    moid        = data.intersight_asset_target.infra_target.results[0].registered_device[0].moid
+  }
+  
+  organization {
+    object_type = "organization.Organization"
+    moid        = data.intersight_organization_organization.organization.results[0].moid
   }
 }
+
+
+############################################################
+# GET IP POOL MOID
+############################################################
+data "intersight_ippool_pool" "k8s_pool" {
+  name = var.ip_pool
+}
+
+
